@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Quiz interactivo de selección múltiple basado en el pensum oficial de Educación Media General de Venezuela: 14 áreas de formación, 5 años.">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'none'">
+<title>1000 Cosas que debe saber un Bachiller Venezolano</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;800;900&family=Karla:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+</head>
+<body>
+<style>
+  :root{
+    --paper:#EEF2EF;
+    --paper-line:#D6E0D9;
+    --card:#FBFDFC;
+    --ink:#1D2622;
+    --ink-soft:#4C5850;
+    --rule:#C4D0C8;
+    --accent:#C63A2C;
+    --accent-ink:#FBFDFC;
+    --accent2:#2A4FA0;
+    --good:#2C7A50;
+    --good-bg:#DFF0E4;
+    --bad:#C63A2C;
+    --bad-bg:#FBE3DE;
+    --shadow: 2px 3px 0 rgba(29,38,34,0.14);
+    --shadow-sm: 1px 2px 0 rgba(29,38,34,0.12);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#182420;
+      --paper-line:#22322C;
+      --card:#1F2E28;
+      --ink:#ECEDE6;
+      --ink-soft:#AAB8AF;
+      --rule:#33463C;
+      --accent:#F0684F;
+      --accent-ink:#182420;
+      --accent2:#7FA6F2;
+      --good:#5FC98A;
+      --good-bg:#1E3A2A;
+      --bad:#F0684F;
+      --bad-bg:#3B241E;
+      --shadow: 2px 3px 0 rgba(0,0,0,0.35);
+      --shadow-sm: 1px 2px 0 rgba(0,0,0,0.3);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#182420;
+    --paper-line:#22322C;
+    --card:#1F2E28;
+    --ink:#ECEDE6;
+    --ink-soft:#AAB8AF;
+    --rule:#33463C;
+    --accent:#F0684F;
+    --accent-ink:#182420;
+    --accent2:#7FA6F2;
+    --good:#5FC98A;
+    --good-bg:#1E3A2A;
+    --bad:#F0684F;
+    --bad-bg:#3B241E;
+    --shadow: 2px 3px 0 rgba(0,0,0,0.35);
+    --shadow-sm: 1px 2px 0 rgba(0,0,0,0.3);
+    color-scheme: dark;
+  }
+
+  *{box-sizing:border-box;}
+  body{margin:0;}
+  .bvq{
+    background:
+      repeating-linear-gradient(0deg, var(--paper-line) 0 1px, transparent 1px 28px),
+      repeating-linear-gradient(90deg, var(--paper-line) 0 1px, transparent 1px 28px),
+      var(--paper);
+    color:var(--ink);
+    font-family:"Karla",system-ui,sans-serif;
+    min-height:100%;
+    padding:32px 16px 64px;
+    -webkit-font-smoothing:antialiased;
+  }
+  .bvq-shell{
+    max-width:840px;
+    margin:0 auto;
+    position:relative;
+    padding-left:34px;
+  }
+  .bvq-spine{
+    position:absolute;
+    left:0; top:6px; bottom:6px;
+    width:22px;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-evenly;
+    align-items:center;
+  }
+  .bvq-spine span{
+    width:11px;height:11px;border-radius:50%;
+    background:var(--paper);
+    border:2px solid var(--rule);
+  }
+  @media (max-width:640px){ .bvq-spine{display:none;} .bvq-shell{padding-left:0;} }
+
+  .bvq-card{
+    background:var(--card);
+    border:1.5px solid var(--rule);
+    border-radius:10px;
+    box-shadow:var(--shadow);
+  }
+
+  .bvq-eyebrow{
+    font-family:"IBM Plex Mono",monospace;
+    font-size:12.5px;
+    font-weight:600;
+    letter-spacing:0.09em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+  }
+  h1.bvq-title{
+    font-family:"Archivo",system-ui,sans-serif;
+    font-weight:900;
+    font-size:clamp(28px,5vw,42px);
+    line-height:1.04;
+    letter-spacing:-0.01em;
+    margin:6px 0 10px;
+    text-wrap:balance;
+  }
+  .bvq-title em{
+    font-style:normal;
+    color:var(--accent);
+  }
+  .bvq-sub{
+    font-size:15.5px;
+    color:var(--ink-soft);
+    max-width:56ch;
+    line-height:1.5;
+    margin:0 0 26px;
+  }
+
+  .bvq-tabs{
+    display:flex;
+    gap:8px;
+    margin-bottom:22px;
+    flex-wrap:wrap;
+  }
+  .bvq-tab{
+    font-family:"IBM Plex Mono",monospace;
+    font-size:12.5px;
+    font-weight:600;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    padding:9px 14px;
+    border-radius:7px;
+    border:1.5px solid var(--rule);
+    background:var(--card);
+    color:var(--ink-soft);
+    cursor:pointer;
+  }
+  .bvq-tab[aria-selected="true"]{
+    background:var(--ink);
+    color:var(--paper);
+    border-color:var(--ink);
+  }
+  .bvq-tab:focus-visible, .bvq-opt:focus-visible, .bvq-btn:focus-visible, .bvq-areacard:focus-visible, .bvq-yearbtn:focus-visible{
+    outline:2.5px solid var(--accent2);
+    outline-offset:2px;
+  }
+
+  .bvq-panel{display:none;}
+  .bvq-panel.active{display:block;}
+
+  .bvq-areagrid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+    gap:10px;
+  }
+  .bvq-areacard{
+    text-align:left;
+    cursor:pointer;
+    padding:14px 14px 13px;
+    border-radius:9px;
+    border:1.5px solid var(--rule);
+    background:var(--card);
+    box-shadow:var(--shadow-sm);
+    display:flex;
+    flex-direction:column;
+    gap:9px;
+    transition:transform .12s ease;
+  }
+  .bvq-areacard:hover{ transform:translateY(-2px); }
+  .bvq-code{
+    font-family:"IBM Plex Mono",monospace;
+    font-size:11.5px;
+    font-weight:600;
+    letter-spacing:0.06em;
+    color:hsl(var(--hue) 70% 30%);
+    background:hsl(var(--hue) 70% 92%);
+    border:1px solid hsl(var(--hue) 55% 70%);
+    padding:2px 8px;
+    border-radius:5px;
+    width:fit-content;
+  }
+  :root:not([data-theme="light"]) .bvq-code, :root[data-theme="dark"] .bvq-code{
+    color:hsl(var(--hue) 75% 78%);
+    background:hsl(var(--hue) 40% 18%);
+    border-color:hsl(var(--hue) 45% 32%);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]) .bvq-code{
+      color:hsl(var(--hue) 75% 78%);
+      background:hsl(var(--hue) 40% 18%);
+      border-color:hsl(var(--hue) 45% 32%);
+    }
+  }
+  .bvq-arealabel{ font-weight:700; font-size:14.5px; line-height:1.25; }
+  .bvq-areacount{ font-family:"IBM Plex Mono",monospace; font-size:11.5px; color:var(--ink-soft); }
+
+  .bvq-yearrow{ display:flex; gap:10px; flex-wrap:wrap; }
+  .bvq-yearbtn{
+    font-family:"Archivo",sans-serif;
+    font-weight:800;
+    font-size:20px;
+    width:72px;height:72px;
+    border-radius:10px;
+    border:1.5px solid var(--rule);
+    background:var(--card);
+    color:var(--ink);
+    cursor:pointer;
+    box-shadow:var(--shadow-sm);
+  }
+  .bvq-yearbtn small{
+    display:block;
+    font-family:"IBM Plex Mono",monospace;
+    font-weight:500;
+    font-size:10px;
+    color:var(--ink-soft);
+    letter-spacing:0.05em;
+  }
+  .bvq-yearbtn:hover{ transform:translateY(-2px); }
+
+  .bvq-cta{
+    margin-top:22px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+    flex-wrap:wrap;
+    padding:18px 20px;
+    border-radius:10px;
+    background:var(--ink);
+    color:var(--paper);
+  }
+  .bvq-cta p{margin:0;font-size:14px;color:var(--paper);opacity:0.8;max-width:40ch;}
+  .bvq-cta strong{display:block;font-family:"Archivo";font-size:18px;font-weight:800;margin-bottom:2px;color:var(--paper);}
+  .bvq-btn{
+    font-family:"IBM Plex Mono",monospace;
+    font-weight:600;
+    font-size:13px;
+    letter-spacing:0.03em;
+    text-transform:uppercase;
+    padding:12px 20px;
+    border-radius:8px;
+    border:none;
+    cursor:pointer;
+    background:var(--accent);
+    color:var(--accent-ink);
+    white-space:nowrap;
+  }
+  .bvq-btn.ghost{
+    background:transparent;
+    border:1.5px solid var(--rule);
+    color:var(--ink);
+  }
+  .bvq-btn.on-dark{ background:var(--accent); color:var(--accent-ink); }
+
+  .bvq-footnote{
+    margin-top:18px;
+    font-family:"IBM Plex Mono",monospace;
+    font-size:11.5px;
+    color:var(--ink-soft);
+    letter-spacing:0.03em;
+  }
+
+  /* Quiz screen */
+  .bvq-quizbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    margin-bottom:18px;
+    flex-wrap:wrap;
+  }
+  .bvq-quizmeta{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+  .bvq-score{
+    font-family:"IBM Plex Mono",monospace;
+    font-size:12.5px;
+    font-weight:600;
+    color:var(--ink-soft);
+  }
+  .bvq-score b{ color:var(--ink); }
+  .bvq-dots{ display:flex; gap:5px; flex-wrap:wrap; max-width:220px; }
+  .bvq-dot{ width:8px;height:8px;border-radius:50%; background:var(--rule); }
+  .bvq-dot.done-ok{ background:var(--good); }
+  .bvq-dot.done-bad{ background:var(--bad); }
+  .bvq-dot.now{ outline:2px solid var(--accent2); outline-offset:1.5px; }
+
+  .bvq-qcard{ padding:26px 24px 24px; }
+  .bvq-qtag{ display:flex; gap:8px; align-items:center; margin-bottom:14px; }
+  .bvq-qtext{
+    font-family:"Archivo",sans-serif;
+    font-weight:800;
+    font-size:clamp(19px,3vw,24px);
+    line-height:1.28;
+    margin:0 0 22px;
+    text-wrap:balance;
+  }
+  .bvq-opts{ display:flex; flex-direction:column; gap:10px; }
+  .bvq-opt{
+    display:flex;
+    align-items:center;
+    gap:13px;
+    text-align:left;
+    padding:12px 16px;
+    border-radius:9px;
+    border:1.5px solid var(--rule);
+    background:var(--card);
+    cursor:pointer;
+    font-size:15px;
+    color:var(--ink);
+    font-family:"Karla",sans-serif;
+  }
+  .bvq-opt:hover:not(:disabled){ border-color:var(--accent2); }
+  .bvq-bubble{
+    flex:none;
+    width:28px;height:28px;
+    border-radius:50%;
+    border:2px solid var(--rule);
+    display:flex;align-items:center;justify-content:center;
+    font-family:"IBM Plex Mono",monospace;
+    font-weight:600;
+    font-size:12.5px;
+    color:var(--ink-soft);
+  }
+  .bvq-opt.correct{ background:var(--good-bg); border-color:var(--good); }
+  .bvq-opt.correct .bvq-bubble{ background:var(--good); border-color:var(--good); color:#fff; }
+  .bvq-opt.wrong{ background:var(--bad-bg); border-color:var(--bad); }
+  .bvq-opt.wrong .bvq-bubble{ background:var(--bad); border-color:var(--bad); color:#fff; }
+  .bvq-opt:disabled{ cursor:default; }
+
+  .bvq-explain{
+    margin-top:18px;
+    padding:14px 16px;
+    border-radius:8px;
+    background:var(--paper);
+    border:1px dashed var(--rule);
+    font-size:13.5px;
+    color:var(--ink-soft);
+    line-height:1.5;
+    display:none;
+  }
+  .bvq-explain.show{ display:block; }
+  .bvq-explain b{ color:var(--ink); }
+
+  .bvq-qfoot{
+    margin-top:20px;
+    display:flex;
+    justify-content:flex-end;
+  }
+
+  /* Results */
+  .bvq-results{ padding:30px 26px; text-align:center; }
+  .bvq-scorering{
+    width:132px;height:132px;
+    border-radius:50%;
+    border:6px solid var(--rule);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    margin:6px auto 20px;
+  }
+  .bvq-scorering b{ font-family:"Archivo"; font-size:34px; font-weight:900; line-height:1; }
+  .bvq-scorering span{ font-family:"IBM Plex Mono",monospace; font-size:11px; color:var(--ink-soft); margin-top:4px;}
+  .bvq-resmsg{ font-size:15px; max-width:44ch; margin:0 auto 22px; color:var(--ink-soft); }
+  .bvq-resbtns{ display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
+  .bvq-review{ margin-top:26px; text-align:left; display:flex; flex-direction:column; gap:10px; }
+  .bvq-review details{ border:1px solid var(--rule); border-radius:8px; padding:10px 14px; background:var(--paper); }
+  .bvq-review summary{ font-size:13.5px; cursor:pointer; color:var(--ink-soft); }
+  .bvq-review summary b{ color:var(--ink); }
+  .bvq-review p{ font-size:13px; color:var(--ink-soft); margin:8px 0 0; }
+
+  .bvq-topbar{ display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; }
+  .bvq-back{
+    font-family:"IBM Plex Mono",monospace;
+    font-size:12px; font-weight:600; letter-spacing:0.04em; text-transform:uppercase;
+    background:none; border:none; color:var(--ink-soft); cursor:pointer; padding:4px 0;
+  }
+  .bvq-back:hover{ color:var(--accent2); }
+
+  .bvq-hidden{ display:none !important; }
+</style>
+
+<div class="bvq">
+  <div class="bvq-shell">
+    <div class="bvq-spine"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+
+    <div id="bvq-screen-menu">
+      <p class="bvq-eyebrow">Pensum oficial &middot; Educación Media General &middot; Venezuela</p>
+      <h1 class="bvq-title">1000 cosas que debe<br>saber un <em>bachiller</em></h1>
+      <p class="bvq-sub">Preguntas de selección múltiple organizadas tal como aparecen en el plan de estudio: 14 áreas de formación, 5 años. Lote 1 en línea &mdash; más preguntas se añaden con el tiempo.</p>
+
+      <div class="bvq-tabs" role="tablist">
+        <button class="bvq-tab" data-panel="area" aria-selected="true" role="tab">Por área</button>
+        <button class="bvq-tab" data-panel="year" aria-selected="false" role="tab">Por año</button>
+      </div>
+
+      <div class="bvq-panel active" id="bvq-panel-area">
+        <div class="bvq-areagrid" id="bvq-areagrid"></div>
+      </div>
+
+      <div class="bvq-panel" id="bvq-panel-year">
+        <div class="bvq-yearrow" id="bvq-yearrow"></div>
+      </div>
+
+      <div class="bvq-cta">
+        <p><strong>Simulacro mixto</strong>20 preguntas al azar, de todas las áreas y años, como un examen general.</p>
+        <button class="bvq-btn on-dark" id="bvq-random-btn">Comenzar simulacro</button>
+      </div>
+
+      <p class="bvq-footnote" id="bvq-footcount"></p>
+    </div>
+
+    <div id="bvq-screen-quiz" class="bvq-hidden">
+      <div class="bvq-topbar">
+        <button class="bvq-back" id="bvq-quiz-back">&larr; Volver al menú</button>
+      </div>
+      <div class="bvq-quizbar">
+        <div class="bvq-quizmeta">
+          <span class="bvq-eyebrow" id="bvq-quiz-label">&nbsp;</span>
+        </div>
+        <div class="bvq-quizmeta">
+          <span class="bvq-score" id="bvq-quiz-score">Aciertos: <b>0</b>/0</span>
+        </div>
+      </div>
+      <div class="bvq-dots" id="bvq-dots"></div>
+      <br>
+      <div class="bvq-card bvq-qcard">
+        <div class="bvq-qtag">
+          <span class="bvq-code" id="bvq-q-code" style="--hue:0">&nbsp;</span>
+          <span class="bvq-eyebrow" id="bvq-q-year">&nbsp;</span>
+        </div>
+        <p class="bvq-qtext" id="bvq-q-text"></p>
+        <div class="bvq-opts" id="bvq-q-opts"></div>
+        <div class="bvq-explain" id="bvq-q-explain"></div>
+        <div class="bvq-qfoot">
+          <button class="bvq-btn bvq-hidden" id="bvq-next-btn">Siguiente &rarr;</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="bvq-screen-results" class="bvq-hidden">
+      <div class="bvq-card bvq-results">
+        <p class="bvq-eyebrow" id="bvq-res-label">Resultado</p>
+        <div class="bvq-scorering">
+          <b id="bvq-res-pct">0%</b>
+          <span id="bvq-res-frac">0/0</span>
+        </div>
+        <p class="bvq-resmsg" id="bvq-res-msg"></p>
+        <div class="bvq-resbtns">
+          <button class="bvq-btn" id="bvq-retry-btn">Reintentar</button>
+          <button class="bvq-btn ghost" id="bvq-menu-btn">Volver al menú</button>
+        </div>
+        <div class="bvq-review" id="bvq-review"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var AREAS = [
+    {code:"CAS", label:"Castellano", years:[1,2,3,4,5], hue:350},
+    {code:"ING", label:"Inglés y otras lenguas", years:[1,2,3,4,5], hue:16},
+    {code:"MAT", label:"Matemáticas", years:[1,2,3,4,5], hue:41},
+    {code:"EDF", label:"Educación Física", years:[1,2,3,4,5], hue:67},
+    {code:"ART", label:"Arte y Patrimonio", years:[1,2], hue:93},
+    {code:"CNA", label:"Ciencias Naturales", years:[1,2], hue:119},
+    {code:"FIS", label:"Física", years:[3,4,5], hue:144},
+    {code:"QUI", label:"Química", years:[3,4,5], hue:170},
+    {code:"BIO", label:"Biología", years:[3,4,5], hue:196},
+    {code:"CTI", label:"Ciencias de la Tierra", years:[5], hue:221},
+    {code:"GHC", label:"Geografía, Historia y Ciudadanía", years:[1,2,3,4,5], hue:247},
+    {code:"FSN", label:"Formación Soberanía Nacional", years:[4,5], hue:273},
+    {code:"OYC", label:"Orientación y Convivencia", years:[1,2,3,4,5], hue:299},
+    {code:"PGC", label:"Participación en Grupos", years:[1,2,3,4,5], hue:324}
+  ];
+  var AREA_BY_CODE = {};
+  AREAS.forEach(function(a){ AREA_BY_CODE[a.code]=a; });
+
+  var Q = [
+    {a:"CAS",y:1,q:"¿Cuál es el sujeto de la oración “Los estudiantes cantan el himno”?",o:["Los estudiantes","cantan","el himno","cantan el himno"],c:0,e:"El sujeto es quien realiza la acción expresada por el verbo."},
+    {a:"CAS",y:1,q:"¿Cómo se llama la figura literaria que compara dos elementos usando “como” o “cual”?",o:["Metáfora","Símil","Hipérbole","Personificación"],c:1,e:"El símil compara explícitamente usando un nexo comparativo."},
+    {a:"CAS",y:2,q:"¿Quién escribió la novela “Doña Bárbara”?",o:["Rómulo Gallegos","Teresa de la Parra","Andrés Bello","Arturo Uslar Pietri"],c:0},
+    {a:"CAS",y:2,q:"¿Cuál es el antónimo de “generoso”?",o:["Amable","Tacaño","Alegre","Honesto"],c:1},
+    {a:"CAS",y:3,q:"¿Quién escribió la novela “Ifigenia”?",o:["Teresa de la Parra","Rómulo Gallegos","Rafael Cadenas","Mariano Picón Salas"],c:0},
+    {a:"CAS",y:3,q:"El movimiento literario venezolano de comienzos del siglo XX centrado en la vida rural y el llano se llama:",o:["Modernismo","Criollismo","Romanticismo","Vanguardismo"],c:1},
+    {a:"CAS",y:4,q:"¿Quién es el autor de la “Silva a la agricultura de la zona tórrida”?",o:["Andrés Bello","Simón Rodríguez","Rómulo Gallegos","José Antonio Ramos Sucre"],c:0},
+    {a:"CAS",y:4,q:"Un ensayo es un texto que se caracteriza principalmente por:",o:["Narrar hechos ficticios","Exponer y argumentar ideas propias del autor","Describir un escenario poético","Presentar diálogos teatrales"],c:1},
+    {a:"CAS",y:5,q:"¿Qué figura literaria consiste en nombrar la parte por el todo, como en “contar cabezas” por “contar personas”?",o:["Sinécdoque","Metonimia","Anáfora","Elipsis"],c:0},
+    {a:"CAS",y:5,q:"¿Cómo se llama el encuentro de dos vocales que se pronuncian en sílabas distintas, como en “ba-úl”?",o:["Diptongo","Hiato","Triptongo","Sinalefa"],c:1},
+
+    {a:"ING",y:1,q:"How do you say “yo tengo” in English?",o:["I have","I has","I having","I to have"],c:0},
+    {a:"ING",y:1,q:"Choose the correct plural of “child”:",o:["Childs","Childes","Children","Childrens"],c:2},
+    {a:"ING",y:2,q:"Which word is a synonym of “happy”?",o:["Sad","Glad","Angry","Tired"],c:1},
+    {a:"ING",y:2,q:"Complete: “She ___ to school every day.”",o:["go","goes","going","gone"],c:1},
+    {a:"ING",y:3,q:"What is the past tense of “go”?",o:["Goed","Gone","Went","Going"],c:2},
+    {a:"ING",y:3,q:"Which sentence uses the present perfect correctly?",o:["I have seen that movie.","I has seen that movie.","I have saw that movie.","I having seen that movie."],c:0},
+    {a:"ING",y:4,q:"Choose the correct comparative: “This book is ___ than that one.”",o:["gooder","better","best","more good"],c:1},
+    {a:"ING",y:4,q:"What does the word “however” express?",o:["Addition","Contrast","Cause","Time"],c:1},
+    {a:"ING",y:5,q:"Identify the conditional type: “If I had studied, I would have passed.”",o:["First conditional","Second conditional","Third conditional","Zero conditional"],c:2},
+    {a:"ING",y:5,q:"Which is a phrasal verb meaning “to postpone”?",o:["Put off","Put on","Put up","Put in"],c:0},
+
+    {a:"MAT",y:1,q:"¿Cuál es el resultado de resolver la ecuación 2x + 3 = 11?",o:["x=3","x=4","x=5","x=8"],c:1},
+    {a:"MAT",y:1,q:"Un número primo es aquel que:",o:["Es divisible por 2","Solo es divisible por 1 y por sí mismo","Es siempre par","Termina en 5"],c:1},
+    {a:"MAT",y:2,q:"La fórmula del área de un triángulo es:",o:["base × altura","(base × altura) / 2","2 × (base + altura)","base²"],c:1},
+    {a:"MAT",y:2,q:"¿Cuál es el resultado de (-3) × (-4)?",o:["-12","12","-7","7"],c:1},
+    {a:"MAT",y:3,q:"El teorema de Pitágoras establece que en un triángulo rectángulo:",o:["a + b = c","a² + b² = c²","a × b = c","a² - b² = c²"],c:1},
+    {a:"MAT",y:3,q:"La fórmula del perímetro de un círculo (circunferencia) es:",o:["πr²","2πr","πd²","4πr"],c:1},
+    {a:"MAT",y:4,q:"En la ecuación de la recta y = mx + b, la letra “m” representa:",o:["El punto de corte con el eje y","La pendiente","El punto de corte con el eje x","La distancia al origen"],c:1},
+    {a:"MAT",y:4,q:"¿Cómo se factoriza la diferencia de cuadrados a² - b²?",o:["(a-b)²","(a+b)(a-b)","(a+b)²","a(a-b)"],c:1},
+    {a:"MAT",y:5,q:"En la fórmula cuadrática, el discriminante se calcula como:",o:["b² - 4ac","b² + 4ac","4ac - b²","2b - 4ac"],c:0},
+    {a:"MAT",y:5,q:"En un triángulo rectángulo, el seno de un ángulo se define como:",o:["Cateto adyacente / hipotenusa","Cateto opuesto / hipotenusa","Cateto opuesto / cateto adyacente","Hipotenusa / cateto opuesto"],c:1},
+
+    {a:"EDF",y:1,q:"¿Cuántos jugadores conforman un equipo de fútbol en el campo, sin contar suplentes?",o:["9","10","11","12"],c:2},
+    {a:"EDF",y:1,q:"El calentamiento antes de hacer ejercicio sirve principalmente para:",o:["Quemar más calorías","Preparar músculos y articulaciones y prevenir lesiones","Aumentar la altura","Reducir la frecuencia cardíaca"],c:1},
+    {a:"EDF",y:2,q:"¿Cuál es el músculo más grande del cuerpo humano?",o:["Bíceps","Glúteo mayor","Tríceps","Deltoides"],c:1},
+    {a:"EDF",y:2,q:"En el voleibol, ¿cuántos toques como máximo puede dar un equipo antes de pasar el balón al otro lado?",o:["2","3","4","Ilimitados"],c:1},
+    {a:"EDF",y:3,q:"La frecuencia cardíaca en reposo de un adulto sano ronda entre:",o:["30-40 lpm","60-100 lpm","120-140 lpm","150-180 lpm"],c:1},
+    {a:"EDF",y:3,q:"¿Qué deporte se practica en un ring y consiste en golpear al oponente con los puños?",o:["Judo","Boxeo","Esgrima","Taekwondo"],c:1},
+    {a:"EDF",y:4,q:"La flexibilidad, resistencia, fuerza y velocidad son ejemplos de:",o:["Deportes olímpicos","Capacidades físicas condicionales","Reglas de arbitraje","Posiciones tácticas"],c:1},
+    {a:"EDF",y:4,q:"¿Cada cuántos años se celebran los Juegos Olímpicos de verano?",o:["2","3","4","5"],c:2},
+    {a:"EDF",y:5,q:"Una dieta balanceada para un deportista debe incluir principalmente:",o:["Solo proteínas","Carbohidratos, proteínas, grasas, vitaminas y minerales en proporción adecuada","Solo carbohidratos","Suplementos artificiales"],c:1},
+    {a:"EDF",y:5,q:"¿Qué significa “IMC” en el contexto de salud física?",o:["Índice de Masa Corporal","Índice de Movimiento Cardíaco","Indicador de Musculatura Corporal","Índice Metabólico Calórico"],c:0},
+
+    {a:"ART",y:1,q:"¿Qué artista venezolano es célebre por sus obras cinéticas y del color, como el “Cromointerferente”?",o:["Armando Reverón","Carlos Cruz-Diez","Jesús Soto","Marisol Escobar"],c:1},
+    {a:"ART",y:1,q:"El Teatro Teresa Carreño, importante centro cultural, se encuentra en:",o:["Maracaibo","Caracas","Valencia","Mérida"],c:1},
+    {a:"ART",y:1,q:"Jesús Soto es reconocido mundialmente por sus obras de:",o:["Pintura realista","Arte cinético","Escultura clásica","Arte colonial"],c:1},
+    {a:"ART",y:1,q:"El patrimonio inmaterial de la humanidad declarado por la UNESCO que se celebra en Venezuela es:",o:["Los Diablos Danzantes de Corpus Christi","El Salto Ángel","El Ávila","La Plaza Bolívar"],c:0},
+    {a:"ART",y:1,q:"Armando Reverón, pintor venezolano, desarrolló gran parte de su obra en:",o:["Caracas","Macuto (Litoral)","Mérida","Maracaibo"],c:1},
+    {a:"ART",y:1,q:"El género musical tradicional del llano venezolano, interpretado con arpa, cuatro y maracas, se llama:",o:["Salsa","Joropo","Gaita","Merengue"],c:1},
+    {a:"ART",y:2,q:"El Museo de Bellas Artes de Venezuela se ubica en:",o:["Caracas","Maracay","Barquisimeto","Ciudad Bolívar"],c:0},
+    {a:"ART",y:2,q:"¿Qué técnica pictórica consiste en aplicar pintura sobre una superficie húmeda de yeso o cal, típica de murales?",o:["Óleo","Acuarela","Fresco","Grabado"],c:2},
+    {a:"ART",y:2,q:"¿Qué es el patrimonio cultural tangible?",o:["Tradiciones orales y música","Bienes materiales como edificios, monumentos y objetos","Solo las leyes de un país","Idiomas indígenas"],c:1},
+    {a:"ART",y:2,q:"El casco histórico de Coro y su puerto, declarado Patrimonio de la Humanidad, se ubica en el estado:",o:["Falcón","Zulia","Sucre","Trujillo"],c:0},
+
+    {a:"CNA",y:1,q:"¿Cuál es la unidad básica de todos los seres vivos?",o:["El átomo","La célula","El tejido","El órgano"],c:1},
+    {a:"CNA",y:1,q:"El proceso mediante el cual las plantas producen su alimento usando luz solar se llama:",o:["Respiración","Fotosíntesis","Digestión","Transpiración"],c:1},
+    {a:"CNA",y:1,q:"¿Cuál de los siguientes es un estado de la materia?",o:["Sólido","Molécula","Átomo","Energía"],c:0},
+    {a:"CNA",y:1,q:"El agua se convierte en vapor mediante el proceso de:",o:["Condensación","Evaporación","Solidificación","Fusión"],c:1},
+    {a:"CNA",y:1,q:"La capa de la Tierra donde existe vida se llama:",o:["Atmósfera","Biosfera","Litosfera","Hidrosfera"],c:1},
+    {a:"CNA",y:1,q:"El movimiento de rotación de la Tierra da lugar principalmente a:",o:["Las estaciones del año","El día y la noche","Las mareas","Los eclipses"],c:1},
+    {a:"CNA",y:2,q:"¿Qué órgano del cuerpo humano bombea la sangre?",o:["El pulmón","El corazón","El hígado","El riñón"],c:1},
+    {a:"CNA",y:2,q:"El sistema que permite la respiración en los seres humanos se llama sistema:",o:["Digestivo","Respiratorio","Circulatorio","Nervioso"],c:1},
+    {a:"CNA",y:2,q:"¿Cuáles son los tres estados fundamentales de la materia?",o:["Sólido, líquido y gaseoso","Frío, tibio y caliente","Ácido, neutro y básico","Ligero, medio y pesado"],c:0},
+    {a:"CNA",y:2,q:"¿Qué gas es esencial para la respiración de los seres humanos?",o:["Dióxido de carbono","Oxígeno","Nitrógeno","Hidrógeno"],c:1},
+
+    {a:"FIS",y:3,q:"La unidad de medida de la fuerza en el Sistema Internacional es:",o:["Joule","Newton","Watt","Pascal"],c:1},
+    {a:"FIS",y:3,q:"La primera ley de Newton, o ley de la inercia, establece que:",o:["Un cuerpo en reposo o movimiento uniforme permanece así a menos que actúe una fuerza externa","La fuerza es igual a masa por aceleración","A toda acción corresponde una reacción igual y opuesta","La energía no se crea ni se destruye"],c:0},
+    {a:"FIS",y:3,q:"La velocidad se define como:",o:["Distancia entre tiempo","Masa entre volumen","Fuerza entre área","Tiempo entre distancia"],c:0},
+    {a:"FIS",y:3,q:"El peso de un objeto depende de:",o:["Solo su masa","Su masa y la gravedad del lugar","Solo su volumen","Solo su forma"],c:1},
+    {a:"FIS",y:4,q:"La segunda ley de Newton se expresa mediante la fórmula:",o:["F = m/a","F = m × a","F = m + a","F = a/m"],c:1},
+    {a:"FIS",y:4,q:"La unidad de medida de la energía en el Sistema Internacional es:",o:["Newton","Watt","Joule","Pascal"],c:2},
+    {a:"FIS",y:4,q:"¿Qué tipo de energía posee un cuerpo en movimiento?",o:["Energía potencial","Energía cinética","Energía térmica","Energía nuclear"],c:1},
+    {a:"FIS",y:5,q:"La luz visible es un tipo de:",o:["Onda mecánica","Onda electromagnética","Partícula sin energía","Sonido"],c:1},
+    {a:"FIS",y:5,q:"La velocidad de la luz en el vacío es aproximadamente:",o:["300.000 km/s","3.000 km/s","30.000 km/s","3.000.000 km/s"],c:0},
+    {a:"FIS",y:5,q:"La ley de la conservación de la energía establece que:",o:["La energía se puede crear libremente","La energía no se crea ni se destruye, solo se transforma","La energía siempre se pierde","Toda energía se convierte en calor"],c:1},
+
+    {a:"QUI",y:3,q:"La unidad básica de la materia según la teoría atómica es:",o:["La molécula","El átomo","El electrón","El compuesto"],c:1},
+    {a:"QUI",y:3,q:"¿Qué partícula subatómica tiene carga positiva?",o:["Electrón","Neutrón","Protón","Fotón"],c:2},
+    {a:"QUI",y:3,q:"El agua tiene la fórmula química:",o:["CO2","H2O","O2","NaCl"],c:1},
+    {a:"QUI",y:3,q:"El número de protones de un átomo determina su:",o:["Masa atómica","Número atómico, es decir, la identidad del elemento","Carga eléctrica total","Estado físico"],c:1},
+    {a:"QUI",y:4,q:"La tabla periódica organiza los elementos principalmente según:",o:["Su color","Su número atómico","Su estado a temperatura ambiente","Su año de descubrimiento"],c:1},
+    {a:"QUI",y:4,q:"Una mezcla homogénea, donde no se distinguen sus componentes a simple vista, se llama:",o:["Suspensión","Solución","Coloide","Aleación heterogénea"],c:1},
+    {a:"QUI",y:4,q:"El pH mide:",o:["La temperatura de una sustancia","La acidez o basicidad de una sustancia","La densidad de un líquido","La concentración de sal"],c:1},
+    {a:"QUI",y:5,q:"Una reacción química en la que se libera energía en forma de calor se llama:",o:["Endotérmica","Exotérmica","Isotérmica","Neutra"],c:1},
+    {a:"QUI",y:5,q:"El símbolo químico del sodio es:",o:["S","So","Na","Sd"],c:2},
+    {a:"QUI",y:5,q:"Los hidrocarburos son compuestos formados principalmente por:",o:["Carbono e hidrógeno","Oxígeno y nitrógeno","Sodio y cloro","Calcio y carbono"],c:0},
+
+    {a:"BIO",y:3,q:"La molécula que contiene la información genética de los seres vivos es:",o:["ARN","ADN","ATP","Proteína"],c:1},
+    {a:"BIO",y:3,q:"¿Cuál es la función principal de los glóbulos rojos?",o:["Combatir infecciones","Transportar oxígeno","Coagular la sangre","Producir hormonas"],c:1},
+    {a:"BIO",y:3,q:"La célula que no tiene núcleo definido se llama:",o:["Eucariota","Procariota","Neurona","Gameto"],c:1},
+    {a:"BIO",y:3,q:"Los seres vivos que producen su propio alimento se llaman:",o:["Heterótrofos","Autótrofos","Consumidores","Descomponedores"],c:1},
+    {a:"BIO",y:4,q:"El proceso de división celular que da origen a las células reproductoras (gametos) se llama:",o:["Mitosis","Meiosis","Fotosíntesis","Fermentación"],c:1},
+    {a:"BIO",y:4,q:"¿Cuál es el órgano principal del sistema nervioso central?",o:["El corazón","El cerebro","El hígado","El pulmón"],c:1},
+    {a:"BIO",y:4,q:"La teoría de la evolución por selección natural fue propuesta por:",o:["Gregor Mendel","Charles Darwin","Louis Pasteur","Isaac Newton"],c:1},
+    {a:"BIO",y:5,q:"Gregor Mendel es considerado el padre de:",o:["La evolución","La genética","La microbiología","La ecología"],c:1},
+    {a:"BIO",y:5,q:"Un ecosistema está formado por:",o:["Solo los seres vivos de un lugar","Los seres vivos y su ambiente físico interrelacionados","Solo el clima de una región","Solo las plantas de un área"],c:1},
+    {a:"BIO",y:5,q:"El proceso mediante el cual los organismos obtienen energía degradando nutrientes se llama:",o:["Fotosíntesis","Respiración celular","Excreción","Absorción"],c:1},
+
+    {a:"CTI",y:5,q:"La capa más externa y sólida de la Tierra, sobre la que vivimos, se llama:",o:["Núcleo","Manto","Corteza terrestre","Atmósfera"],c:2},
+    {a:"CTI",y:5,q:"El movimiento de las placas tectónicas explica principalmente:",o:["Las mareas","Terremotos y formación de montañas","Las estaciones del año","La lluvia"],c:1},
+    {a:"CTI",y:5,q:"La escala usada para medir la magnitud de los terremotos es la escala de:",o:["Richter","Celsius","Beaufort","Kelvin"],c:0},
+    {a:"CTI",y:5,q:"¿Cuál es el ciclo natural que describe el movimiento del agua entre la atmósfera, la superficie y el subsuelo?",o:["Ciclo del carbono","Ciclo del agua (hidrológico)","Ciclo del nitrógeno","Ciclo de las rocas"],c:1},
+    {a:"CTI",y:5,q:"Las rocas ígneas se forman a partir de:",o:["Sedimentos compactados","El enfriamiento y solidificación del magma","La acción del viento","Restos de organismos"],c:1},
+    {a:"CTI",y:5,q:"La capa de la atmósfera que nos protege de la radiación ultravioleta del sol es la capa de:",o:["Ozono","Nitrógeno","Oxígeno puro","Dióxido de carbono"],c:0},
+    {a:"CTI",y:5,q:"El fenómeno de calentamiento global está principalmente asociado al aumento de:",o:["Oxígeno atmosférico","Gases de efecto invernadero como el CO2","Vapor de agua marino únicamente","Radiación solar directa"],c:1},
+    {a:"CTI",y:5,q:"Los volcanes se forman generalmente en:",o:["El centro de las placas tectónicas, lejos de los bordes","Los bordes o límites de las placas tectónicas","Solo en zonas desérticas","Solo bajo el océano"],c:1},
+    {a:"CTI",y:5,q:"¿Cómo se llama el estudio científico de los terremotos?",o:["Vulcanología","Sismología","Geología","Meteorología"],c:1},
+    {a:"CTI",y:5,q:"El Salto Ángel, la catarata más alta del mundo, se encuentra en Venezuela en el estado:",o:["Bolívar","Amazonas","Táchira","Zulia"],c:0},
+
+    {a:"GHC",y:1,q:"¿Cuál es la capital de Venezuela?",o:["Maracaibo","Caracas","Valencia","Barquisimeto"],c:1},
+    {a:"GHC",y:1,q:"¿A quién se considera el Libertador de Venezuela?",o:["Francisco de Miranda","Simón Bolívar","José Antonio Páez","Antonio José de Sucre"],c:1},
+    {a:"GHC",y:2,q:"¿En qué fecha se celebra la Independencia de Venezuela?",o:["19 de abril","5 de julio","24 de junio","12 de octubre"],c:1},
+    {a:"GHC",y:2,q:"El río más caudaloso de Venezuela es el río:",o:["Apure","Orinoco","Caroní","Chama"],c:1},
+    {a:"GHC",y:3,q:"¿Cuántos estados tiene actualmente Venezuela, sin contar el Distrito Capital?",o:["20","23","24","25"],c:1},
+    {a:"GHC",y:3,q:"La Batalla de Carabobo, decisiva para la independencia, ocurrió en el año:",o:["1810","1821","1830","1811"],c:1},
+    {a:"GHC",y:4,q:"¿Qué es la Constitución de un país?",o:["Un tratado internacional","La ley suprema que organiza el Estado y establece derechos y deberes","Un decreto presidencial temporal","Un acuerdo entre partidos políticos"],c:1},
+    {a:"GHC",y:4,q:"El sistema de gobierno de Venezuela es una república:",o:["Monárquica","Federal, presidencial y democrática","Parlamentaria","Confederal"],c:1},
+    {a:"GHC",y:5,q:"El lago más grande de Sudamérica, ubicado en Venezuela, es:",o:["Lago de Valencia","Lago de Maracaibo","Laguna de Tacarigua","Represa del Guri"],c:1},
+    {a:"GHC",y:5,q:"¿En qué año culminó la Segunda Guerra Mundial?",o:["1939","1943","1945","1950"],c:2},
+
+    {a:"FSN",y:4,q:"La soberanía nacional se refiere a:",o:["El derecho de un pueblo a gobernarse a sí mismo sin injerencia externa","El poder exclusivo del presidente","Las leyes de comercio internacional","El territorio marítimo únicamente"],c:0},
+    {a:"FSN",y:4,q:"¿Cuáles son los colores de la bandera de Venezuela?",o:["Rojo, azul y verde","Amarillo, azul y rojo","Verde, blanco y rojo","Amarillo, blanco y negro"],c:1},
+    {a:"FSN",y:4,q:"El escudo nacional de Venezuela incluye, entre otros elementos, un símbolo de abundancia representado por:",o:["Un cóndor","Una cornucopia (cuerno de la abundancia)","Un fusil","Una espada"],c:1},
+    {a:"FSN",y:4,q:"¿Cuál es el ave nacional de Venezuela?",o:["El águila","El turpial","El cóndor","El colibrí"],c:1},
+    {a:"FSN",y:4,q:"La flor nacional de Venezuela es:",o:["La orquídea Flor de Mayo (Cattleya mossiae)","La rosa","El girasol","El jazmín"],c:0},
+    {a:"FSN",y:4,q:"¿Qué se entiende por “defensa integral de la nación”?",o:["Solo la acción de las Fuerzas Armadas","La corresponsabilidad entre el Estado y la sociedad para proteger la soberanía y los intereses del país","Únicamente la protección de las fronteras físicas","Un tratado militar con otros países"],c:1},
+    {a:"FSN",y:5,q:"La Zona Económica Exclusiva de un país en el mar se extiende, según el derecho internacional, hasta:",o:["12 millas náuticas","50 millas náuticas","200 millas náuticas","500 millas náuticas"],c:2},
+    {a:"FSN",y:5,q:"¿Qué organismo internacional agrupa a la mayoría de países del mundo para tratar temas de paz y seguridad?",o:["La OTAN","La ONU (Organización de las Naciones Unidas)","El FMI","La OMS"],c:1},
+    {a:"FSN",y:5,q:"El árbol nacional de Venezuela es:",o:["El araguaney","El apamate","El samán","La ceiba"],c:0},
+    {a:"FSN",y:5,q:"El territorio del Esequibo, reclamado históricamente por Venezuela, se disputa desde:",o:["El siglo XX únicamente","El Laudo Arbitral de París de 1899, que Venezuela considera nulo","Tratados firmados en el siglo XXI","Nunca ha sido reclamado formalmente"],c:1},
+
+    {a:"OYC",y:1,q:"La empatía se define como la capacidad de:",o:["Imponer las propias ideas","Comprender y compartir los sentimientos de otra persona","Evitar el contacto social","Ganar siempre una discusión"],c:1},
+    {a:"OYC",y:1,q:"Un valor fundamental para la sana convivencia en un grupo es:",o:["El respeto","La indiferencia","La competencia constante","El aislamiento"],c:0},
+    {a:"OYC",y:2,q:"El acoso escolar sistemático y repetido hacia un compañero se conoce como:",o:["Bullying","Debate","Trabajo en equipo","Liderazgo"],c:0},
+    {a:"OYC",y:2,q:"La comunicación asertiva consiste en:",o:["Callar siempre las opiniones propias","Expresar ideas y sentimientos de forma clara y respetuosa","Imponer la opinión propia por la fuerza","Evitar hablar con los demás"],c:1},
+    {a:"OYC",y:3,q:"La resolución pacífica de conflictos busca principalmente:",o:["Que una parte pierda siempre","Llegar a acuerdos mediante el diálogo","Evitar cualquier conversación","Usar la violencia como último recurso válido"],c:1},
+    {a:"OYC",y:3,q:"La autoestima se refiere a:",o:["La valoración que una persona tiene de sí misma","El nivel académico de una persona","La cantidad de amigos que se tiene","La apariencia física únicamente"],c:0},
+    {a:"OYC",y:4,q:"El trabajo en equipo efectivo requiere principalmente:",o:["Que una sola persona haga todo el trabajo","Comunicación, respeto y responsabilidad compartida","Competencia entre los miembros","Ausencia total de reglas"],c:1},
+    {a:"OYC",y:4,q:"La inteligencia emocional incluye la capacidad de:",o:["Ignorar las emociones propias","Reconocer y gestionar las propias emociones y las de los demás","Reprimir siempre las emociones","Solo expresar enojo"],c:1},
+    {a:"OYC",y:5,q:"Un proyecto de vida personal debe incluir principalmente:",o:["Solo metas económicas","Metas y valores que orienten las decisiones a corto y largo plazo","Copiar el proyecto de otra persona","No tener metas definidas"],c:1},
+    {a:"OYC",y:5,q:"La tolerancia hacia las diferencias culturales, religiosas o de opinión es una base de:",o:["La discriminación","La convivencia democrática y el respeto a la diversidad","El conflicto permanente","La exclusión social"],c:1},
+
+    {a:"PGC",y:1,q:"El trabajo colaborativo en un proyecto escolar se beneficia principalmente de:",o:["La división de tareas y el aporte de cada integrante","Que una sola persona decida todo","La falta de comunicación","La competencia interna destructiva"],c:0},
+    {a:"PGC",y:1,q:"Un huerto escolar es un ejemplo de proyecto:",o:["Recreativo sin fines educativos","Productivo y de aprendizaje práctico","Solo deportivo","Artístico exclusivamente"],c:1},
+    {a:"PGC",y:2,q:"La planificación de un proyecto generalmente inicia con:",o:["La ejecución inmediata sin plan","La definición de objetivos y metas claras","La entrega final del producto","La evaluación de resultados"],c:1},
+    {a:"PGC",y:2,q:"El reciclaje como actividad productiva escolar contribuye principalmente a:",o:["Aumentar la contaminación","La sostenibilidad ambiental y el reúso de materiales","Gastar más recursos","Ninguna utilidad práctica"],c:1},
+    {a:"PGC",y:3,q:"En un proyecto grupal, evaluar los resultados sirve para:",o:["Culpar a un integrante","Identificar logros y aspectos a mejorar","Ignorar lo realizado","Repetir errores futuros"],c:1},
+    {a:"PGC",y:3,q:"La creatividad en un proyecto de producción se refiere a:",o:["Copiar exactamente lo que otros hicieron","Generar ideas originales para resolver un problema o necesidad","Evitar proponer cambios","Seguir un único método sin variación"],c:1},
+    {a:"PGC",y:4,q:"Un emprendimiento escolar, por ejemplo vender manualidades, ayuda a desarrollar principalmente:",o:["Habilidades de gestión, planificación y trabajo en equipo","Solo habilidades artísticas","Ninguna habilidad práctica","Dependencia económica"],c:0},
+    {a:"PGC",y:4,q:"El liderazgo dentro de un grupo de trabajo implica:",o:["Imponer decisiones sin escuchar al grupo","Guiar y motivar al equipo hacia un objetivo común","Ausentarse de las actividades","Delegar toda la responsabilidad en otros"],c:1},
+    {a:"PGC",y:5,q:"La sistematización de un proyecto consiste en:",o:["Ignorar el proceso realizado","Documentar de forma ordenada el proceso y los resultados obtenidos","Improvisar sin registrar nada","Repetir el proyecto sin cambios"],c:1},
+    {a:"PGC",y:5,q:"Un proyecto sociocomunitario busca principalmente:",o:["Beneficiar solo a quien lo realiza","Atender una necesidad o problema de la comunidad","Generar ganancias personales exclusivamente","No tener relación con la comunidad"],c:1}
+  ];
+
+  // ---- state ----
+  var state = { list:[], idx:0, score:0, answered:false, label:"" };
+
+  function shuffle(arr){
+    var a = arr.slice();
+    for(var i=a.length-1;i>0;i--){
+      var j = Math.floor(Math.random()*(i+1));
+      var t=a[i]; a[i]=a[j]; a[j]=t;
+    }
+    return a;
+  }
+
+  function countFor(pred){ return Q.filter(pred).length; }
+
+  function buildMenu(){
+    var grid = document.getElementById("bvq-areagrid");
+    grid.innerHTML = AREAS.map(function(a){
+      var n = countFor(function(q){return q.a===a.code;});
+      return '<button class="bvq-areacard" style="--hue:'+a.hue+'" data-area="'+a.code+'">' +
+        '<span class="bvq-code">'+a.code+'</span>' +
+        '<span class="bvq-arealabel">'+a.label+'</span>' +
+        '<span class="bvq-areacount">'+n+' preguntas &middot; años '+a.years.join(", ")+'</span>' +
+        '</button>';
+    }).join("");
+    Array.prototype.forEach.call(grid.querySelectorAll(".bvq-areacard"), function(btn){
+      btn.addEventListener("click", function(){
+        var code = btn.getAttribute("data-area");
+        var area = AREA_BY_CODE[code];
+        startQuiz(shuffle(Q.filter(function(q){return q.a===code;})), area.label);
+      });
+    });
+
+    var row = document.getElementById("bvq-yearrow");
+    row.innerHTML = [1,2,3,4,5].map(function(y){
+      var n = countFor(function(q){return q.y===y;});
+      return '<button class="bvq-yearbtn" data-year="'+y+'">'+y+'<small>'+n+' preg.</small></button>';
+    }).join("");
+    Array.prototype.forEach.call(row.querySelectorAll(".bvq-yearbtn"), function(btn){
+      btn.addEventListener("click", function(){
+        var y = Number(btn.getAttribute("data-year"));
+        startQuiz(shuffle(Q.filter(function(q){return q.y===y;})), y+"er/to año");
+      });
+    });
+
+    document.getElementById("bvq-footcount").textContent =
+      "Lote 1: " + Q.length + " preguntas cargadas · 14 áreas · 5 años · meta del proyecto: 1000–2000 preguntas.";
+  }
+
+  function bindTabs(){
+    var tabs = document.querySelectorAll(".bvq-tab");
+    Array.prototype.forEach.call(tabs, function(tab){
+      tab.addEventListener("click", function(){
+        Array.prototype.forEach.call(tabs, function(t){ t.setAttribute("aria-selected","false"); });
+        tab.setAttribute("aria-selected","true");
+        var target = tab.getAttribute("data-panel");
+        Array.prototype.forEach.call(document.querySelectorAll(".bvq-panel"), function(p){ p.classList.remove("active"); });
+        document.getElementById("bvq-panel-"+target).classList.add("active");
+      });
+    });
+  }
+
+  function showScreen(name){
+    ["menu","quiz","results"].forEach(function(n){
+      document.getElementById("bvq-screen-"+n).classList.toggle("bvq-hidden", n!==name);
+    });
+  }
+
+  function startQuiz(list, label){
+    if(list.length===0) return;
+    state = { list:list, idx:0, score:0, answered:false, label:label, wrong:[] };
+    document.getElementById("bvq-quiz-label").textContent = label;
+    buildDots();
+    showScreen("quiz");
+    renderQuestion();
+  }
+
+  function buildDots(){
+    var dots = document.getElementById("bvq-dots");
+    dots.innerHTML = state.list.map(function(_,i){
+      return '<span class="bvq-dot" data-i="'+i+'"></span>';
+    }).join("");
+  }
+
+  function updateDots(){
+    var els = document.querySelectorAll(".bvq-dot");
+    els.forEach(function(el,i){
+      el.classList.toggle("now", i===state.idx);
+    });
+  }
+
+  function renderQuestion(){
+    state.answered = false;
+    var q = state.list[state.idx];
+    var area = AREA_BY_CODE[q.a];
+    document.getElementById("bvq-q-code").textContent = q.a;
+    document.getElementById("bvq-q-code").style.setProperty("--hue", area.hue);
+    document.getElementById("bvq-q-year").textContent = area.label + " · Año " + q.y;
+    document.getElementById("bvq-q-text").textContent = q.q;
+    document.getElementById("bvq-quiz-score").innerHTML = "Aciertos: <b>"+state.score+"</b>/"+state.list.length;
+
+    var letters = ["A","B","C","D"];
+    var opts = document.getElementById("bvq-q-opts");
+    opts.innerHTML = q.o.map(function(text,i){
+      return '<button class="bvq-opt" data-i="'+i+'"><span class="bvq-bubble">'+letters[i]+'</span><span>'+text+'</span></button>';
+    }).join("");
+    Array.prototype.forEach.call(opts.querySelectorAll(".bvq-opt"), function(btn){
+      btn.addEventListener("click", function(){ selectAnswer(Number(btn.getAttribute("data-i"))); });
+    });
+
+    document.getElementById("bvq-q-explain").classList.remove("show");
+    document.getElementById("bvq-q-explain").innerHTML = "";
+    document.getElementById("bvq-next-btn").classList.add("bvq-hidden");
+    updateDots();
+  }
+
+  function selectAnswer(i){
+    if(state.answered) return;
+    state.answered = true;
+    var q = state.list[state.idx];
+    var correct = i===q.c;
+    if(correct) state.score++;
+    else state.wrong = (state.wrong||[]).concat([q]);
+
+    var opts = document.querySelectorAll(".bvq-opt");
+    opts.forEach(function(btn,idx){
+      btn.disabled = true;
+      if(idx===q.c) btn.classList.add("correct");
+      else if(idx===i) btn.classList.add("wrong");
+    });
+
+    var dot = document.querySelector('.bvq-dot[data-i="'+state.idx+'"]');
+    if(dot) dot.classList.add(correct ? "done-ok" : "done-bad");
+
+    document.getElementById("bvq-quiz-score").innerHTML = "Aciertos: <b>"+state.score+"</b>/"+state.list.length;
+
+    if(q.e){
+      var ex = document.getElementById("bvq-q-explain");
+      ex.innerHTML = "<b>"+(correct?"Correcto. ":"No exactamente. ")+"</b>"+q.e;
+      ex.classList.add("show");
+    }
+    document.getElementById("bvq-next-btn").classList.remove("bvq-hidden");
+  }
+
+  function nextQuestion(){
+    if(state.idx < state.list.length-1){
+      state.idx++;
+      renderQuestion();
+    } else {
+      showResults();
+    }
+  }
+
+  function showResults(){
+    var total = state.list.length;
+    var pct = Math.round((state.score/total)*100);
+    document.getElementById("bvq-res-label").textContent = state.label;
+    document.getElementById("bvq-res-pct").textContent = pct+"%";
+    document.getElementById("bvq-res-frac").textContent = state.score+"/"+total;
+
+    var msg;
+    if(pct===100) msg = "Puntaje perfecto. Dominas este bloque por completo.";
+    else if(pct>=80) msg = "Muy buen desempeño. Repasa las que fallaste y lo tendrás dominado.";
+    else if(pct>=50) msg = "Vas por buen camino. Conviene repasar este bloque una vez más.";
+    else msg = "Este bloque necesita más repaso. Vuelve a intentarlo cuando quieras.";
+    document.getElementById("bvq-res-msg").textContent = msg;
+
+    var review = document.getElementById("bvq-review");
+    var wrong = state.wrong||[];
+    if(wrong.length){
+      review.innerHTML = '<p class="bvq-eyebrow">Para repasar ('+wrong.length+')</p>' + wrong.map(function(q){
+        return '<details><summary><b>'+q.a+' · año '+q.y+'</b> — '+q.q+'</summary><p>Respuesta correcta: '+q.o[q.c]+(q.e? ' — '+q.e:'')+'</p></details>';
+      }).join("");
+    } else {
+      review.innerHTML = "";
+    }
+
+    showScreen("results");
+  }
+
+  document.getElementById("bvq-next-btn").addEventListener("click", nextQuestion);
+  document.getElementById("bvq-retry-btn").addEventListener("click", function(){
+    startQuiz(shuffle(state.list), state.label);
+  });
+  document.getElementById("bvq-menu-btn").addEventListener("click", function(){ showScreen("menu"); });
+  document.getElementById("bvq-quiz-back").addEventListener("click", function(){ showScreen("menu"); });
+  document.getElementById("bvq-random-btn").addEventListener("click", function(){
+    startQuiz(shuffle(Q).slice(0,20), "Simulacro mixto");
+  });
+
+  bindTabs();
+  buildMenu();
+  showScreen("menu");
+})();
+</script>
+
+</body>
+
+</html>
