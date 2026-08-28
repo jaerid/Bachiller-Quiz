@@ -2,7 +2,7 @@
 
 Quiz interactivo de selección múltiple basado en el pensum oficial de Educación Media General de Venezuela (Resolución Ministerial 41.221, 2017 — 14 áreas de formación, 5 años).
 
-Sitio 100% estático: un solo archivo `index.html` con HTML, CSS y JavaScript sin dependencias externas (aparte de Google Fonts) ni servidor. No hay backend, no se recopilan datos personales; los puntajes de práctica solo se guardan en el navegador de quien juega.
+Sitio estático (un solo archivo `index.html`, sin build) alojado en GitHub Pages, con cuentas, grupos y ranking respaldados por Firebase (Auth + Firestore) — ver `firebaseConfig` y las reglas de seguridad dentro del propio `index.html`. Registro con correo/contraseña y apodo elegido por cada usuario; el correo nunca se muestra en público. Jugar sin cuenta también funciona: el quiz corre igual, solo que el puntaje no se guarda en ningún ranking.
 
 ## Uso local
 
@@ -26,7 +26,7 @@ Las preguntas viven en el arreglo `Q` dentro de `index.html`, con este esquema:
 - `c`: índice (0-3) de la opción correcta
 - `e`: explicación breve (opcional)
 
-**Estado actual:** lote 1, 140 preguntas (10 por área). Meta del proyecto: 1000-2000 preguntas.
+**Estado actual:** lotes 1-2, 280 preguntas (20 por área). Meta del proyecto: 1000-2000 preguntas.
 
 ## Publicación
 
